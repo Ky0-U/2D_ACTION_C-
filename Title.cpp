@@ -46,20 +46,9 @@ void Title::Draw(bool& drawtitle, bool& gameover, System& system, Map& map, Play
 			if (checkreturn == 1)
 			{
 
-				//ClearDrawScreen();                   // 裏画面のデータを全て削除
+				c += 1;                                 //cをカウントアップ
 
-				//if (c >= 0 && c < 256)                    //cが0~256の時
-					//SetDrawBright(c, c, c);        //段々あかるく(c= 0->255)
-				//if (c >= 256 && c < 400)                  //cが256~400の時
-					//SetDrawBright(255, 255, 255);  //通常の明るさ
-				//if (c >= 400 && c < 400 + 256)              //cが400~400+256の時
-				SetDrawBright(255 - c, 255 - c, 255 - c);//段々暗く(c= 255->0)
-
-				DrawBox(0, 0, 1920, 1080, GetColor(255, 255, 255), FALSE);  //画面全体に白い四角形を描画
-
-				c += 5;;                                  //cをカウントアップ
-
-				if (c > 256)
+				if (c > 50)
 				{
 					drawtitle = false;
 					player.Initialize();	// プレイヤー初期化

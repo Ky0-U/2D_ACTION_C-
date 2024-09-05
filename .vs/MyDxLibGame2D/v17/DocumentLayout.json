@@ -1,12 +1,37 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\student\\Desktop\\git\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\student\\Desktop\\github\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{229C6CCE-D20D-4863-AA78-E2C8A1C45EF6}|MyDxLibGame2D.vcxproj|C:\\Users\\student\\Desktop\\github\\Title.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{229C6CCE-D20D-4863-AA78-E2C8A1C45EF6}|MyDxLibGame2D.vcxproj|solutionrelative:Title.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Title.cpp",
+              "DocumentMoniker": "C:\\Users\\student\\Desktop\\github\\Title.cpp",
+              "RelativeDocumentMoniker": "Title.cpp",
+              "ToolTip": "C:\\Users\\student\\Desktop\\github\\Title.cpp",
+              "RelativeToolTip": "Title.cpp",
+              "ViewState": "AQIAACoAAAAAAAAAAADwvzAAAAALAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-09-05T09:42:48.213Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
