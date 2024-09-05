@@ -1,9 +1,13 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\student\\Desktop\\github\\",
+  "WorkspaceRootPath": "C:\\Users\\student\\Desktop\\\u500B\u4EBA\u88FD\u4F5C_RPG\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{229C6CCE-D20D-4863-AA78-E2C8A1C45EF6}|MyDxLibGame2D.vcxproj|C:\\Users\\student\\Desktop\\github\\Title.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{229C6CCE-D20D-4863-AA78-E2C8A1C45EF6}|MyDxLibGame2D.vcxproj|C:\\Users\\student\\Desktop\\\u500B\u4EBA\u88FD\u4F5C_RPG\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{229C6CCE-D20D-4863-AA78-E2C8A1C45EF6}|MyDxLibGame2D.vcxproj|solutionrelative:main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{229C6CCE-D20D-4863-AA78-E2C8A1C45EF6}|MyDxLibGame2D.vcxproj|C:\\Users\\student\\Desktop\\\u500B\u4EBA\u88FD\u4F5C_RPG\\Title.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{229C6CCE-D20D-4863-AA78-E2C8A1C45EF6}|MyDxLibGame2D.vcxproj|solutionrelative:Title.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
@@ -14,17 +18,34 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\student\\Desktop\\\u500B\u4EBA\u88FD\u4F5C_RPG\\main.cpp",
+              "RelativeDocumentMoniker": "main.cpp",
+              "ToolTip": "C:\\Users\\student\\Desktop\\\u500B\u4EBA\u88FD\u4F5C_RPG\\main.cpp",
+              "RelativeToolTip": "main.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-09-05T09:55:41.94Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Title.cpp",
-              "DocumentMoniker": "C:\\Users\\student\\Desktop\\github\\Title.cpp",
+              "DocumentMoniker": "C:\\Users\\student\\Desktop\\\u500B\u4EBA\u88FD\u4F5C_RPG\\Title.cpp",
               "RelativeDocumentMoniker": "Title.cpp",
-              "ToolTip": "C:\\Users\\student\\Desktop\\github\\Title.cpp",
+              "ToolTip": "C:\\Users\\student\\Desktop\\\u500B\u4EBA\u88FD\u4F5C_RPG\\Title.cpp",
               "RelativeToolTip": "Title.cpp",
-              "ViewState": "AQIAACoAAAAAAAAAAADwvzAAAAALAAAA",
+              "ViewState": "AQIAABIAAAAAAAAAAAAAADAAAAALAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-09-05T09:42:48.213Z",
               "EditorCaption": ""
