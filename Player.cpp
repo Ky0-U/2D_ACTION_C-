@@ -1,234 +1,151 @@
-#include "DxLib.h"
-#include "Player.h"
-#include"Vector.h"
-#include"system.h"
+#include"Player.h"
+#include"DxLib.h"
+#include"Enemy.h"
 
-
-// プレイヤー初期化
-void Player::Initialize()
+void Player::Init()
 {
-	// プレイヤーのグラフィックをメモリにロード＆表示座標を初期化
-	LoadDivGraph("data/texture/red_4.png", 24, 24, 1, 120, 120, Graph);
-	LoadDivGraph("data/texture/red_8_re.png", 24, 24, 1, 120, 120, GraphRE);
-	LoadDivGraph("data/texture/gr_3.png", 24, 24, 1, 120, 120, GraphGrRe);
-	
-	jumpsound = LoadSoundMem("data/sound/se05.wav");
+	LoadDivGraph("data/texture/player.png", PLAY_TOTAL_GRAPH, PLAY_GRAPH_WIDTH, PLAY_GRAPH_HIGHT, PLAY_GRAPH_WIDTH_SIZE, PLAY_GRAPH_HIGHT_SIZE, plyGraph);
+	playX = PLAY_X_DEF;
+	playY = PLAY_Y_DEF;
+	plyHP = PLAY_HP;
+	ColorR = 0;
+	ColorG = 255;
+	ColorB = 0;
+	HPcolor = GetColor(ColorR, ColorG, ColorB);
 
-	G = START_G;
-	anim = 5;
-	animtime = 0;
-	pos = VGet(START_X, START_Y, 0);
-	GrX = 2200;
-	GrY = 792;
-	HitEmy = 0;
-	animRe = 6;
-	isMove = true;
+	mode = 0;
+	dir =1;
 
-	// ショットボタンが前のフレームで押されたかどうかを保存する変数にfalse(押されいない)を代入
-	PrevShotFlag = false;
-
-	// プレイヤーと弾の画像のサイズを得る
-	GetGraphSize(Graph[anim], &W, &H);
+	Anim = 0;
+	MVAnim = 30;
+	NLAnim = 0;
 }
 
-// プレイヤーの更新処理
-void Player::Update()
+void Player::Update(Boss&boss)
 {
-	
-		animtime++;
-		if (CheckHitKeyAll&& pos.y == START_Y)
+	if (CheckHitKey(KEY_INPUT_A))
+	{
+		dir = 0;
+		mode = 1;
+		playX -= PLAY_SPEED;
+		Anim++;
+	}
+	else if (CheckHitKey(KEY_INPUT_D))
+	{
+		dir = 1;
+		mode = 1;
+		playX += PLAY_SPEED;
+		Anim++;
+		
+	}
+	else
+	{
+		mode = 0;
+		Anim++;
+	}
+
+	if (CheckHitKey(KEY_INPUT_LSHIFT))
+	{
+		mode = 1;
+
+		if (dir == 0)
 		{
-			if (animtime >= ANIMSPEED)
-			{
-				animtime = 0;
-				anim++;
-			}
+			Anim += 3;//アニメーション速度
+			playX-= PLAY_SPEED*5;
 		}
-		if (anim > 8)
+		else if (dir == 1)
 		{
-			anim = 3;
+			Anim += 3;
+			playX += PLAY_SPEED * 5;
 		}
-	
+		
 
 
-
-	// 矢印キーを押していたらプレイヤーを移動させる
-	if (CheckHitKey(KEY_INPUT_SPACE)&&pos.y== START_Y)
-	{
-		PlaySoundMem(jumpsound, DX_PLAYTYPE_BACK);
-		G = JUMPPOWER+3.0f;
 	}
 	
-	if (pos.y > START_Y)
+
+	if (mode == 0)
 	{
-		pos.y = START_Y;
-		G = START_G;
+		if (Anim > 10)//アニメーションの速度（画像の切り替え速度）
+		{
+			NLAnim++;
+			Anim = 0;
+		}
+
+		if (NLAnim > 7)
+		{
+
+			NLAnim = 0;
+		}
+	}
+	else if (mode == 1)
+	{
+		if (Anim > 10)//アニメーションの速度（画像の切り替え速度）
+		{
+			MVAnim++;
+			Anim = 0;
+		}
+
+		if (MVAnim > 37)
+		{
+
+			MVAnim = 30;
+		}
 	}
 	
-	pos.y -= G;
-	G -= FALLSPEED;
+
+	if(boss.bossX)
 
 	
+	//HPゲージ仮
+	plyHP-=0.5;
+	if (plyHP < 10)
+	{
+		plyHP = 500;
+		ColorR = 0;
+		ColorG = 255;
+		ColorB = 0;
+	}
 
+	if (plyHP < 100)
+	{
+		ColorR = 255;
+		ColorG = 0;
+		ColorB = 0;
+	}
+	else if(plyHP < 200)
+	{
+		ColorR = 255;
+		ColorG = 182;
+		ColorB = 0;
+	}
+	else if (plyHP < 300)
+	{
+		ColorR = 255;
+		ColorG = 255;
+		ColorB = 0;
+	}
 	
-
-	// プレイヤーが画面左端からはみ出そうになっていたら画面内の座標に戻してあげる
-	if (pos.x < 0)
-	{
-		pos.x = 0;
-	}
-	if (pos.x > 1920 - W)
-	{
-		pos.x = 1920 - W;
-	}
-	if (pos.y < 0)
-	{
-		pos.y = 0;
-	}
-	if (pos.y >START_Y)
-	{
-		pos.y = START_Y;
-	}
+	
+	
+	HPcolor = GetColor(ColorR, ColorG, ColorB);
 }
 
-// プレイヤーの描画処理
 void Player::Draw()
 {
-	// プレイヤーを描画
-	/*
-	SetFontSize(70);
-	DrawFormatString(100, 400, GetColor(255, 100, 100), "プレイヤー\n上：%.0f\n下：%.0f\n右：%.0f\n左：%.0f", pos.y + 20, pos.y + H - 20, pos.x + W - 20, pos.x + 20);
-	SetFontSize(-1);
-	*/
+	//DrawGraph(playX, playY, plyGraph[0],TRUE);
+	if (mode == 0)
+	{
+		DrawExtendGraph(playX, playY, playX+ PLAY_XSIZE, playY+ PLAY_YSIZE,plyGraph[NLAnim],TRUE);
+	}
+	else if (mode == 1)
+	{
+		DrawExtendGraph(playX, playY, playX + PLAY_XSIZE, playY + PLAY_YSIZE, plyGraph[MVAnim], TRUE);
+	}
+	
+	DrawBox(100, 50, 610, 100,GetColor(60,60,60),TRUE);
+	DrawBox(110, 55, 600, 95, GetColor(150, 30, 30), TRUE);
+	DrawBox(110, 55, 100+plyHP, 95, HPcolor, TRUE);
 	
 
-		DrawGraph(pos.x, pos.y, Graph[anim], TRUE);
-
-	DrawLine(pos.x+20, pos.y+20, pos.x + W-20, pos.y+20, GetColor(255, 0, 0));//上横
-	DrawLine(pos.x+20, pos.y + H-20, pos.x + W-20, pos.y + H-20, GetColor(255, 0, 0));//下横
-	DrawLine(pos.x+20, pos.y+20, pos.x+20, pos.y + H-20, GetColor(255, 0, 0));//左縦
-	DrawLine(pos.x + W-20, pos.y+20, pos.x + W-20, pos.y + H-20, GetColor(255, 0, 0));//右縦
-		
-	if (HitEmy ==1)
-	{
-			SetDrawBlendMode(DX_BLENDMODE_ADD, 255);//以下に記述されるDraw関数のブレンドを変更する
-			DrawGraph(pos.x, pos.y, Graph[anim], TRUE);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//下記に記述されるDraw関数のブレンドをノーマルに変更する。
-			HitEmy = 0;
-
-	}
-}
-
-
-void Player::Drawtitle()
-{
-	// プレイヤーを描画
-	
-
-
-
-	if (isMove == true)
-		DrawGraph(pos.x, pos.y, Graph[anim], TRUE);
-	else if (isMove == false)
-	{
-		DrawGraph(pos.x, pos.y, GraphRE[animRe], TRUE);
-		DrawGraph(GrX, GrY, GraphGrRe[animRe], TRUE);
-	}
-
-	if (HitEmy == 1)
-	{
-		SetDrawBlendMode(DX_BLENDMODE_ADD, 255);//以下に記述されるDraw関数のブレンドを変更する
-		DrawGraph(pos.x, pos.y, Graph[anim], TRUE);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//下記に記述されるDraw関数のブレンドをノーマルに変更する。
-		HitEmy = 0;
-
-	}
-}
-
-// プレイヤーの更新処理
-void Player::UpdateTitle()
-{
-
-	
-
-
-	animtime++;
-	if (isMove == true)
-	{
-		
-			if (animtime >= ANIMSPEED)
-			{
-				animtime = 0;
-				anim++;
-			}
-			
-		if (anim > 8)
-		{
-			anim = 3;
-		}
-	}
-	else if (isMove == false)
-	{
-			if (animtime >= ANIMSPEED)
-			{
-				animtime = 0;
-				animRe--;
-			}
-		if (animRe<2)
-		{
-			animRe = 6;
-		}
-	}
-
-	// 矢印キーを押していたらプレイヤーを移動させる
-	if (CheckHitKey(KEY_INPUT_SPACE) && pos.y == START_Y)
-	{
-		G = JUMPPOWER;
-		PlaySoundMem(jumpsound, DX_PLAYTYPE_BACK);
-	}
-
-	if (pos.y > START_Y)
-	{
-		pos.y = START_Y;
-		G = START_G;
-	}
-
-	pos.y -= G;
-	G -= FALLSPEED;
-
-
-
-
-
-	// プレイヤーが画面左端からはみ出そうになっていたら画面内の座標に戻してあげる
-	if (pos.y < 0)
-	{
-		pos.y = 0;
-	}
-	if (pos.y > START_Y)
-	{
-		pos.y = START_Y;
-	}
-
-
-	if (isMove == true)
-	{
-		pos.x += 5;
-	}
-	else if (isMove == false)
-	{
-		pos.x -= 7;
-		GrX -= 7;
-
-	}
-		
-
-	if (pos.x > 2000)
-	{
-		isMove = false;
-		GrX = 2200;
-	}
-	else if (GrX < -200)
-		isMove = true;
-	
 }

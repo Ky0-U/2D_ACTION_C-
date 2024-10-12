@@ -1,57 +1,48 @@
 #pragma once
 
-//定数
-const float JUMPPOWER = 22.0f;
-const float START_X = 400.0f;
-const float START_Y = 792.0f;
-const float START_G = 0.0f;
-const float FALLSPEED = 0.8f;
-const float ANIMSPEED = 7;
+const int PLAY_X_DEF = 500;
+const int PLAY_Y_DEF = 400;
+const int PLAY_HP = 500;
+
+
+const int PLAY_SPEED = 2.5;
+
+const int PLAY_TOTAL_GRAPH = 390;		//画像の総分割数(スプレットシート)
+const int PLAY_GRAPH_WIDTH = 30;		//画像の横分割数
+const int PLAY_GRAPH_HIGHT = 13;			//画像の縦分割数
+const int PLAY_GRAPH_WIDTH_SIZE = 288;	//分割した画像の横のサイズ
+const int PLAY_GRAPH_HIGHT_SIZE = 128;	//分割した画像の縦のサイズ
+const int PLAY_XSIZE = 600;				//プレイヤーの横拡大サイズ
+const int PLAY_YSIZE = 300;				//プレイヤーの縦拡大サイズ
 
 
 
-// プロトタイプ宣言
-class Shot;
-class System;
+class Boss;
 
-// プレイヤー構造体.
 class Player
 {
 public:
-	int Graph[16];
-	int GraphRE[16];
-	int GraphGrRe[16];
-	float GrX;
-	float GrY;
-	int animRe;
-	int W;
-	int H;
-	float G;
-	bool PrevShotFlag;
 
-	int jumpsound;
+	int plyGraph[390];
+	float playX;
+	float playY;
+	float plyHP;
+	int HPcolor;
+	float ColorR;
+	float ColorG;
+	float ColorB;
 
-	int anim;
-	int animtime;
-	bool HitEmy;
-	bool isMove = true;
+	bool dir;//向き
 
-	VECTOR pos;//ポジション
+	int MVAnim;//ムーブ、移動アニメーション
+	int NLAnim;
+	int Anim;
 
+	int mode;//モーションの状態
 
-	void Initialize();									// プレイヤー初期化
-	void Update();	// プレイヤーの更新処理
-	void Draw();										// プレイヤーの描画処理		
-	void Drawtitle();										// プレイヤーの描画処理
-	void UpdateTitle();	// タイトル画面のプレイヤーの更新処理
+	void Init();
+	void Update(Boss& boss);
+	void Draw();
 
-	// ポジションのgetter/setter.
-	const VECTOR& GetPos() const { return pos; };
-
-	void SetPos(const VECTOR set) { pos = set; };
 
 };
-
-
-
-

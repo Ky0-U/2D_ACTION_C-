@@ -1,181 +1,139 @@
-#include "DxLib.h"
-#include "Enemy.h"
+#include"Enemy.h"
+#include"DxLib.h"
 #include"Player.h"
-#include"system.h"
 
-// エネミー初期化
-void Enemy::Initialize()
+void Boss::Init()
+{
+	LoadDivGraph("data/texture/Boss.png", BOSS_TOTAL_GRAPH, BOSS_GRAPH_WIDTH, BOSS_GRAPH_HIGHT, BOSS_GRAPH_WIDTH_SIZE, BOSS_GRAPH_HIGHT_SIZE,bossGraph);
+	LoadDivGraph("data/texture/BossRe.png", BOSS_TOTAL_GRAPH, BOSS_GRAPH_WIDTH, BOSS_GRAPH_HIGHT, BOSS_GRAPH_WIDTH_SIZE, BOSS_GRAPH_HIGHT_SIZE, bossReGraph);
+	bossX = BOSS_X_DEF;
+	bossY = BOSS_Y_DEF;
+	MVCoolTime = COOL_TIME;
+
+	NLAnim = 0;
+	MVAnim =22;
+	BTAnim = 0;
+	count = 0;
+	select = 1;
+	Anim = 0;
+	dir = 0;
+
+	ReNLAnim = 21;
+	ReMVAnim = 43;
+	ReBTAnim = 0;
+}
+
+void Boss::Update(Player& player)
 {
 	
-	LoadDivGraph("data/texture/gr_3.png", 24, 24, 1, 120, 120, GraphGrRe);
-	GetGraphSize(GraphGrRe[0], &W, &H);
-		
-	X = ENEMY_X;
-		
-	Y = 792.0f;
 
-		DrawEmy = 0;
+	Anim++;
+	count++;
+
+	if (count > 500)
+	{
+		count = 0;
+	}
+
+
+	if (MVCoolTime > count)
+	{
+		select = 1;
+		if (player.playX < bossX)
+		{
+			dir = 0;
+			bossX -= 0.5;
+		}
+		else
+		{
+			dir = 1;
+			bossX += 0.5;
 	
-	G = START_G;
+		}
 
-	Speed = DEFSPEED;
+		if (Anim > 20)
+		{
+			Anim = 0;
+			MVAnim++;
+			ReMVAnim--;
+		}
+		if (MVAnim > 33)
+		{
+			MVAnim = 22;
+		}
+		if (ReMVAnim < 32)
+		{
+			ReMVAnim = 43;
+		}
+	}
 
-	animtime = 0;
-	animRe = 6;
+	if (500 > count && 300 < count)
+	{
+		select = 0;
+		if (Anim > 20)
+		{
+			Anim = 0;
+			NLAnim++;
+			ReNLAnim--;
+		}
 
+
+		if (NLAnim > 5)
+		{
+			NLAnim = 0;
+		}
+		if (ReNLAnim < 17)
+		{
+			ReNLAnim = 21;
+		}
+
+
+
+		if (player.playX < bossX)
+		{
+			dir = 0;
+		}
+		else
+		{
+			dir = 1;
+
+		}
+
+	}
+	
+	
 
 	
 }
 
-// エネミー更新
-void Enemy::Update(Player&player,System&system,bool&gameover)
+void Boss::Draw()
 {
-	
-	
-
-	animtime++;
-
-		if (CheckHitKeyAll)
-		{
-			if (animtime >= ANIMSPEED)
-			{
-				animtime = 0;
-				animRe--;
-			}
-		}
-		if (animRe < 2)
-		{
-			animRe = 6;
-		}
-
-
-
-	// エネミーの座標を移動している方向に移動する
-	if (X> -100)
+	if (select == 0)
 	{
-			X -= Speed;
-		
-	}
-	else//エネミーが画面外に出たらその座標を画面右端にリセットする
-	{
-		X= 2000;
-		if (system.gamecount < 55)
-		{
-			Speed = Speed + UPSPEED;
-		}
-			
-			
-		
-	}
-
-	if (system.gamecount > 40)
-	{
-				//ジャンプ
-		if (Y == START_Y)
-		{
-			G = JUMPPOWER;
-		}
-
-		if (Y > START_Y)
-		{
-			Y = START_Y;
-			G = START_G;
-		}
-
-		Y -= G;
-		G -= FALLSPEED;
-
-
-	}
-	else
-	{
-		Y = START_Y;
-	}
-	
-
-	
-	if (hitshot[DrawEmy] == 1)
-	{
-		X = 2000;
-		if(DrawEmy != 50)
-		{
-			DrawEmy++;
-		}
-		else
-		{
-			DrawEmy = 0;
-		}
-	}
-	
-	/*
-	DrawLine(pos.x+20, pos.y+20, pos.x + W-20, pos.y+20, GetColor(255, 0, 0));//上横
-	DrawLine(pos.x+20, pos.y + H-20, pos.x + W-20, pos.y + H-20, GetColor(255, 0, 0));//下横
-	DrawLine(pos.x+20, pos.y+20, pos.x+20, pos.y + H-20, GetColor(255, 0, 0));//左縦
-	DrawLine(pos.x + W-20, pos.y+20, pos.x + W-20, pos.y + H-20, GetColor(255, 0,
-	
-	
-	*/
-	
-
-	// プレイヤーとの当たり判定
-	if ((player.pos.x + 20 <= X && player.pos.x + W - 20 >= X) && (player.pos.y + 20 <= Y + 20 && player.pos.y + H - 20 >= Y + 20))
-	{
-		//ヒット判定
-		gameover = true;
-	}
-	if ((player.pos.x + 20 <= X && player.pos.x + W - 20 >= X) && (player.pos.y + 20 >= Y + 20 && player.pos.y + 20 <= Y + H - 20))
-	{
-		//ヒット判定
-		gameover = true;
-	}
-	if ((player.pos.x + 20 >= X && player.pos.x + 20 <= X + W - 20) && (player.pos.y + 20 <= Y + 20 && player.pos.y + H - 20 >= Y + 20))
-	{
-		//ヒット判定
-		gameover = true;
-	}
-	if ((player.pos.x + 20 >= X && player.pos.x + 20 <= X + W - 20) && (player.pos.y + 20 >= Y + 20 && player.pos.y + 20 <= Y + H - 20))
-	{
-		//ヒット判定
-		gameover = true;
-	}
-
-	
-}
-
-// エネミー描画
-void Enemy::Draw(System&system)
-{
-	
-	DrawLine(X, Y + 20, X + W - 20, Y + 20, GetColor(255, 0, 0));//上横
-	DrawLine(X, Y + H - 20, X + W - 20, Y + H - 20, GetColor(255, 0, 0));//下横
-	DrawLine(X, Y + 20, X, Y + H - 20, GetColor(255, 0, 0));//左縦
-	DrawLine(X + W - 20, Y + 20, X + W - 20, Y + H - 20, GetColor(255, 0, 0));//右縦
-
-	/*
-	SetFontSize(70);
-	DrawFormatString(400, 400, GetColor(255, 100, 100), "エネミー\n上：%d\n下：%d\n右：%d\n左：%d", Y + 20, Y + H - 20, X + W - 20, X);
-	SetFontSize(-1);
-	*/
-	
-
-	if (system.gamecount > 20&& system.gamecount < 40 || system.gamecount > 70)
-	{
-		if (X>1500&&X<1700||X>700&&X<900)
-		{
-			
-		}
-		else
-		{
-			// エネミーを描画
-			DrawGraph(X, Y, GraphGrRe[animRe], TRUE);
+		if(dir==0)
+		{ 
+			DrawExtendGraph(bossX, bossY, bossX + BOSS_XSIZE, bossY + BOSS_YSIZE, bossGraph[NLAnim], TRUE);
+			//DrawGraph(bossX, bossY, bossGraph[SBAnim], TRUE);
 
 		}
+		else if(dir==1)
+		{
+			DrawExtendGraph(bossX, bossY, bossX + BOSS_XSIZE, bossY + BOSS_YSIZE, bossReGraph[ReNLAnim], TRUE);
+		}
+	
 	}
-	else
+	else if (select == 1)
 	{
-		// エネミーを描画
-		DrawGraph(X, Y, GraphGrRe[animRe], TRUE);
-		
+		if (dir == 0)
+		{
+			DrawExtendGraph(bossX, bossY, bossX + BOSS_XSIZE, bossY + BOSS_YSIZE, bossGraph[MVAnim], TRUE);
+			//DrawGraph(bossX, bossY, bossGraph[MVAnim], TRUE);
+		}
+		else if (dir == 1)
+		{
+			DrawExtendGraph(bossX, bossY, bossX + BOSS_XSIZE, bossY + BOSS_YSIZE, bossReGraph[ReMVAnim], TRUE);
+		}
 	}
+
 	
 }
